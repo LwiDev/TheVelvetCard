@@ -23,7 +23,7 @@ COPY server.ts ./
 COPY src/lib/server ./src/lib/server
 COPY src/lib/poker   ./src/lib/poker
 
-ENV PORT=2000
-EXPOSE 2000
+ENV PORT=3000
+EXPOSE 3000
 
 CMD ["bun", "server.ts"]

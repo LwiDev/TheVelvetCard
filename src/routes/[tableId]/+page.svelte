@@ -362,7 +362,7 @@
                     {#each Array(5) as _, i}
                         <PokerCard
                             card={wsStore.game?.communityCards?.[i] ?? null}
-                            size="xl"
+                            size="lg"
                         />
                     {/each}
                 </div>
@@ -411,7 +411,7 @@
 
             <!-- ── Action HUD ──────────────────────────────────────────────── -->
             <div
-                class="absolute bottom-[2%] left-1/2 -translate-x-1/2 w-[min(1000px,72%)] z-10 flex flex-col gap-4 rounded-2xl border border-[rgba(75,62,39,0.75)] p-5 pb-6 backdrop-blur-xl bg-[rgba(10,7,3,0.93)]"
+                class="absolute bottom-[2%] left-1/2 -translate-x-1/2 w-[90%] lg:w-[min(860px,calc(100%-480px))] z-10 flex flex-col gap-3 lg:gap-4 rounded-2xl border border-[rgba(75,62,39,0.75)] p-3 pb-4 lg:p-5 lg:pb-6 backdrop-blur-xl bg-[rgba(10,7,3,0.93)]"
                 style="box-shadow: 0 -2px 0 rgba(196,146,42,0.1) inset, 0 8px 48px rgba(0,0,0,0.7);"
             >
                 <!-- Info row -->
@@ -475,14 +475,14 @@
 
                 <!-- Action buttons -->
                 {#if isMyTurn}
-                    <div class="flex gap-2.5">
+                    <div class="flex gap-2 lg:gap-2.5">
                         <button
                             onclick={() =>
                                 wsStore.send({
                                     type: "action",
                                     action: "fold",
                                 })}
-                            class="flex-1 py-4 rounded-xl border font-bold text-lg cursor-pointer transition-all flex items-center justify-center gap-2 font-body bg-[rgba(178,34,34,0.12)] border-[rgba(178,34,34,0.4)] text-[#fca5a5] hover:bg-[rgba(178,34,34,0.24)] hover:border-[rgba(178,34,34,0.7)]"
+                            class="flex-1 py-3 lg:py-4 rounded-xl border font-bold text-base lg:text-lg cursor-pointer transition-all flex items-center justify-center gap-2 font-body bg-[rgba(178,34,34,0.12)] border-[rgba(178,34,34,0.4)] text-[#fca5a5] hover:bg-[rgba(178,34,34,0.24)] hover:border-[rgba(178,34,34,0.7)]"
                         >
                             Fold
                         </button>
@@ -493,7 +493,7 @@
                                         type: "action",
                                         action: "check",
                                     })}
-                                class="flex-1 py-4 rounded-xl border font-bold text-lg cursor-pointer transition-all flex items-center justify-center gap-2 font-body bg-[rgba(31,59,40,0.3)] border-[rgba(59,106,58,0.55)] text-[#86efac] hover:bg-[rgba(31,59,40,0.55)] hover:border-[rgba(59,106,58,0.8)]"
+                                class="flex-1 py-3 lg:py-4 rounded-xl border font-bold text-base lg:text-lg cursor-pointer transition-all flex items-center justify-center gap-2 font-body bg-[rgba(31,59,40,0.3)] border-[rgba(59,106,58,0.55)] text-[#86efac] hover:bg-[rgba(31,59,40,0.55)] hover:border-[rgba(59,106,58,0.8)]"
                             >
                                 Check
                             </button>
@@ -504,7 +504,7 @@
                                         type: "action",
                                         action: "call",
                                     })}
-                                class="flex-1 py-4 rounded-xl border font-bold text-lg cursor-pointer transition-all flex items-center justify-center gap-2 font-body bg-[rgba(31,59,40,0.3)] border-[rgba(59,106,58,0.55)] text-[#86efac] hover:bg-[rgba(31,59,40,0.55)] hover:border-[rgba(59,106,58,0.8)]"
+                                class="flex-1 py-3 lg:py-4 rounded-xl border font-bold text-base lg:text-lg cursor-pointer transition-all flex items-center justify-center gap-2 font-body bg-[rgba(31,59,40,0.3)] border-[rgba(59,106,58,0.55)] text-[#86efac] hover:bg-[rgba(31,59,40,0.55)] hover:border-[rgba(59,106,58,0.8)]"
                             >
                                 Call <span
                                     class="font-mono text-base opacity-85"
@@ -518,7 +518,7 @@
                                     type: "action",
                                     action: "all-in",
                                 })}
-                            class="flex-1 py-4 rounded-xl border font-bold text-lg cursor-pointer transition-all flex items-center justify-center gap-2 font-body bg-[rgba(217,119,6,0.12)] border-[rgba(217,119,6,0.4)] text-[#fbbf24] hover:bg-[rgba(217,119,6,0.24)] hover:border-[rgba(217,119,6,0.7)]"
+                            class="flex-1 py-3 lg:py-4 rounded-xl border font-bold text-base lg:text-lg cursor-pointer transition-all flex items-center justify-center gap-2 font-body bg-[rgba(217,119,6,0.12)] border-[rgba(217,119,6,0.4)] text-[#fbbf24] hover:bg-[rgba(217,119,6,0.24)] hover:border-[rgba(217,119,6,0.7)]"
                         >
                             All-In <span class="font-mono text-base opacity-85"
                                 >{me?.chips}</span
@@ -603,7 +603,7 @@
 
             <!-- ── Floating: Hand Rankings ─────────────────────────── -->
             <div
-                class="absolute bottom-[2%] right-[1.5%] w-[clamp(340px,20vw,440px)] z-[15] bg-[rgba(12,8,4,0.96)] border border-[rgba(75,62,39,0.65)] rounded-2xl backdrop-blur-xl overflow-hidden flex flex-col shadow-[0_8px_40px_rgba(0,0,0,0.65)]"
+                class="hidden lg:flex absolute bottom-[2%] right-[1.5%] w-[clamp(200px,15vw,320px)] z-[15] bg-[rgba(12,8,4,0.96)] border border-[rgba(75,62,39,0.65)] rounded-2xl backdrop-blur-xl overflow-hidden flex-col shadow-[0_8px_40px_rgba(0,0,0,0.65)]"
             >
                 <button
                     class="w-full flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-white/4 transition-colors bg-transparent text-left"
@@ -687,7 +687,7 @@
 
             <!-- ── Floating: Hand History ─────────────────────────── -->
             <div
-                class="absolute bottom-[2%] left-[1.5%] w-[clamp(300px,18vw,400px)] z-[15] bg-[rgba(12,8,4,0.96)] border border-[rgba(75,62,39,0.65)] rounded-2xl backdrop-blur-xl overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.65)]"
+                class="hidden lg:block absolute bottom-[2%] left-[1.5%] w-[clamp(200px,15vw,320px)] z-[15] bg-[rgba(12,8,4,0.96)] border border-[rgba(75,62,39,0.65)] rounded-2xl backdrop-blur-xl overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.65)]"
             >
                 <button
                     class="w-full flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-white/4 transition-colors bg-transparent text-left"

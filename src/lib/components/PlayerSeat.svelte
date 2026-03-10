@@ -20,7 +20,7 @@
 </script>
 
 <div
-	class="flex flex-col items-center gap-1.5 min-w-[170px] px-5 py-3 rounded-xl border transition-all duration-200 relative select-none shadow-[0_6px_28px_rgba(0,0,0,0.55)]"
+	class="flex flex-col items-center gap-1.5 min-w-[140px] max-w-[160px] px-5 py-3 rounded-xl border transition-all duration-200 relative select-none shadow-[0_6px_28px_rgba(0,0,0,0.55)]"
 	class:border-border={!isActive && !isWinner && !isMe}
 	class:bg-gradient-to-br={true}
 	class:from-surface-high={!isMe}
@@ -68,14 +68,14 @@
 	<!-- Cards -->
 	<div class="flex gap-1.5 mt-1.5">
 		{#if player.holeCards === null}
-			<PokerCard card={null} size="lg" />
-			<PokerCard card={null} size="lg" />
+			<PokerCard card={null} size="md" />
+			<PokerCard card={null} size="md" />
 		{:else if player.holeCards[0] === '??'}
-			<PokerCard card="??" size="lg" />
-			<PokerCard card="??" size="lg" />
+			<PokerCard card="??" size="md" />
+			<PokerCard card="??" size="md" />
 		{:else}
-			<PokerCard card={player.holeCards[0]} size="lg" />
-			<PokerCard card={player.holeCards[1]} size="lg" />
+			<PokerCard card={player.holeCards[0]} size="md" />
+			<PokerCard card={player.holeCards[1]} size="md" />
 		{/if}
 	</div>
 </div>

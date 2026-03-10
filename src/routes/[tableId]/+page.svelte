@@ -12,12 +12,12 @@
     // ─── Constants ────────────────────────────────────────────────────────────
 
     const SEAT_POS = [
-        { top: "72%", left: "50%" }, // 0 – bottom (local player)
-        { top: "66%", left: "84%" }, // 1 – bottom-right
-        { top: "30%", left: "85%" }, // 2 – right
+        { top: "61%", left: "50%" }, // 0 – bottom (local player)
+        { top: "56%", left: "82%" }, // 1 – bottom-right
+        { top: "32%", left: "84%" }, // 2 – right
         { top: "11%", left: "66%" }, // 3 – top-right
         { top: "11%", left: "34%" }, // 4 – top-left
-        { top: "30%", left: "15%" }, // 5 – left
+        { top: "32%", left: "16%" }, // 5 – left
     ] as const;
 
     const HANDS_REF = [
@@ -356,7 +356,7 @@
 
             <!-- Community cards + pot -->
             <div
-                class="absolute inset-0 flex flex-col items-center justify-center gap-5 pointer-events-none pb-[14%]"
+                class="absolute inset-0 flex flex-col items-center justify-center gap-5 pointer-events-none pb-[36%]"
             >
                 <div class="flex gap-3">
                     {#each Array(5) as _, i}
@@ -786,10 +786,10 @@
 <style>
     .felt-oval {
         position: absolute;
-        top: 8%;
-        left: 14%;
-        right: 14%;
-        bottom: 22%;
+        top: 6%;
+        left: 12%;
+        right: 12%;
+        bottom: 34%;
         border-radius: 50%;
         background: radial-gradient(
             ellipse at 45% 42%,

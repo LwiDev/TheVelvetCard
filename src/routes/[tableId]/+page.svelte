@@ -110,6 +110,8 @@
     let logEl = $state<HTMLElement | null>(null);
     let logCollapsed = $state(false);
     let handRankingsCollapsed = $state(true);
+    let showMobileLog = $state(false);
+    let showMobileRankings = $state(false);
 
     // ─── Derived ──────────────────────────────────────────────────────────────
 
@@ -311,35 +313,48 @@
 <div class="h-svh flex flex-col bg-bg overflow-hidden">
     <!-- Header -->
     <header
-        class="shrink-0 flex items-center justify-between px-6 h-[60px] border-b border-[rgba(75,62,39,0.6)] bg-[rgba(20,14,8,0.85)]"
+        class="shrink-0 flex items-center justify-between px-3 lg:px-6 h-[52px] lg:h-[60px] border-b border-[rgba(75,62,39,0.6)] bg-[rgba(20,14,8,0.85)]"
     >
-        <div class="flex items-center gap-4">
+        <!-- Left: Leave + table name + phase -->
+        <div class="flex items-center gap-2 lg:gap-4 min-w-0">
             <button
                 onclick={leaveTable}
-                class="text-muted text-sm hover:text-gold transition-colors cursor-pointer bg-transparent border-none p-0 font-body"
+                class="shrink-0 text-muted text-sm hover:text-gold transition-colors cursor-pointer bg-transparent border-none p-0 font-body"
             >
                 ← Leave
             </button>
-            <span class="text-border/40">|</span>
-            <span
-                class="font-title text-lg text-gold font-semibold tracking-wide"
-                >♠ {wsStore.game?.tableId ?? "…"}</span
-            >
+            <span class="text-border/40 hidden lg:inline shrink-0">|</span>
+            <!-- Table name: truncated, tap-to-copy on mobile -->
+            <button
+                onclick={() => navigator.clipboard?.writeText(wsStore.game?.tableId ?? '')}
+                title="Tap to copy table ID"
+                class="font-title text-sm lg:text-lg text-gold font-semibold tracking-wide truncate max-w-[90px] sm:max-w-[160px] lg:max-w-[220px] bg-transparent border-none cursor-pointer p-0 text-left hover:text-gold-light transition-colors"
+            >♠ {wsStore.game?.tableId ?? "…"}</button>
             {#if wsStore.game?.phase && wsStore.game.phase !== "waiting"}
-                <span
-                    class="text-[0.7rem] font-extrabold uppercase tracking-[0.18em] text-active bg-active/10 border border-active/35 px-3 py-1 rounded"
-                >
+                <span class="shrink-0 text-[0.6rem] lg:text-[0.7rem] font-extrabold uppercase tracking-[0.15em] text-active bg-active/10 border border-active/35 px-2 lg:px-3 py-0.5 lg:py-1 rounded">
                     {wsStore.game.phase}
                 </span>
             {/if}
             {#if wsStore.game?.handNumber}
-                <span class="text-sm text-muted"
-                    >Hand #{wsStore.game.handNumber}</span
-                >
+                <span class="hidden sm:inline text-xs lg:text-sm text-muted shrink-0">#{wsStore.game.handNumber}</span>
             {/if}
         </div>
-        <div class="flex items-center gap-3">
-            <span class="font-semibold text-[#e4d8c4]">{me?.name ?? "…"}</span>
+        <!-- Right: icon buttons (mobile) + name + dot -->
+        <div class="flex items-center gap-2 lg:gap-3 shrink-0">
+            <!-- Mobile icon-only panel toggles -->
+            <div class="flex items-center gap-1.5 lg:hidden">
+                <button
+                    onclick={() => (showMobileLog = !showMobileLog)}
+                    title="Hand History"
+                    class="w-8 h-8 flex items-center justify-center rounded-lg border cursor-pointer transition-all text-base {showMobileLog ? 'bg-gold/15 border-gold/55 text-gold-light' : 'bg-white/5 border-border/45 text-muted hover:text-gold hover:border-gold/35'}"
+                >☰</button>
+                <button
+                    onclick={() => (showMobileRankings = !showMobileRankings)}
+                    title="Hand Rankings"
+                    class="w-8 h-8 flex items-center justify-center rounded-lg border cursor-pointer transition-all text-base {showMobileRankings ? 'bg-gold/15 border-gold/55 text-gold-light' : 'bg-white/5 border-border/45 text-muted hover:text-gold hover:border-gold/35'}"
+                >♠</button>
+            </div>
+            <span class="font-semibold text-[#e4d8c4] text-sm lg:text-base truncate max-w-[80px] lg:max-w-none">{me?.name ?? "…"}</span>
             <span
                 class="w-2.5 h-2.5 rounded-full transition-all {wsStore.connected
                     ? 'bg-[#22c55e] shadow-[0_0_10px_rgba(34,197,94,0.6)]'
@@ -386,7 +401,7 @@
             <!-- Player seats -->
             {#each playersByPos as player, pos}
                 <div
-                    class="absolute -translate-x-1/2 -translate-y-1/2 z-[2]"
+                    class="absolute -translate-x-1/2 -translate-y-1/2 z-[2] scale-[0.7] lg:scale-100"
                     style="top:{SEAT_POS[pos].top}; left:{SEAT_POS[pos].left};"
                 >
                     {#if player !== null}
@@ -411,7 +426,7 @@
 
             <!-- ── Action HUD ──────────────────────────────────────────────── -->
             <div
-                class="absolute bottom-[2%] left-1/2 -translate-x-1/2 w-[90%] lg:w-[min(860px,calc(100%-480px))] z-10 flex flex-col gap-3 lg:gap-4 rounded-2xl border border-[rgba(75,62,39,0.75)] p-3 pb-4 lg:p-5 lg:pb-6 backdrop-blur-xl bg-[rgba(10,7,3,0.93)]"
+                class="absolute bottom-[2%] left-1/2 -translate-x-1/2 w-[90%] lg:w-[min(860px,calc(100%-480px))] z-10 flex flex-col gap-3 lg:gap-4 rounded-2xl border border-[rgba(75,62,39,0.75)] p-2 pb-3 lg:p-5 lg:pb-6 backdrop-blur-xl bg-[rgba(10,7,3,0.93)]"
                 style="box-shadow: 0 -2px 0 rgba(196,146,42,0.1) inset, 0 8px 48px rgba(0,0,0,0.7);"
             >
                 <!-- Info row -->
@@ -467,7 +482,7 @@
                 {#if canStartHand}
                     <button
                         onclick={() => wsStore.send({ type: "start_hand" })}
-                        class="w-full py-4 bg-gradient-to-br from-gold to-gold-light text-[#140e04] font-extrabold text-base tracking-[0.14em] uppercase rounded-xl border-none cursor-pointer transition-all hover:brightness-110 shadow-[0_3px_18px_rgba(196,146,42,0.35)] hover:shadow-[0_6px_28px_rgba(196,146,42,0.5)] font-body"
+                        class="w-full py-2 lg:py-4 bg-gradient-to-br from-gold to-gold-light text-[#140e04] font-extrabold text-sm lg:text-base tracking-[0.14em] uppercase rounded-xl border-none cursor-pointer transition-all hover:brightness-110 shadow-[0_3px_18px_rgba(196,146,42,0.35)] hover:shadow-[0_6px_28px_rgba(196,146,42,0.5)] font-body"
                     >
                         Deal Cards
                     </button>
@@ -482,7 +497,7 @@
                                     type: "action",
                                     action: "fold",
                                 })}
-                            class="flex-1 py-3 lg:py-4 rounded-xl border font-bold text-base lg:text-lg cursor-pointer transition-all flex items-center justify-center gap-2 font-body bg-[rgba(178,34,34,0.12)] border-[rgba(178,34,34,0.4)] text-[#fca5a5] hover:bg-[rgba(178,34,34,0.24)] hover:border-[rgba(178,34,34,0.7)]"
+                            class="flex-1 py-2 lg:py-3 rounded-xl border font-bold text-sm lg:text-base cursor-pointer transition-all flex items-center justify-center gap-2 font-body bg-[rgba(178,34,34,0.12)] border-[rgba(178,34,34,0.4)] text-[#fca5a5] hover:bg-[rgba(178,34,34,0.24)] hover:border-[rgba(178,34,34,0.7)]"
                         >
                             Fold
                         </button>
@@ -493,7 +508,7 @@
                                         type: "action",
                                         action: "check",
                                     })}
-                                class="flex-1 py-3 lg:py-4 rounded-xl border font-bold text-base lg:text-lg cursor-pointer transition-all flex items-center justify-center gap-2 font-body bg-[rgba(31,59,40,0.3)] border-[rgba(59,106,58,0.55)] text-[#86efac] hover:bg-[rgba(31,59,40,0.55)] hover:border-[rgba(59,106,58,0.8)]"
+                                class="flex-1 py-2 lg:py-3 rounded-xl border font-bold text-sm lg:text-base cursor-pointer transition-all flex items-center justify-center gap-2 font-body bg-[rgba(31,59,40,0.3)] border-[rgba(59,106,58,0.55)] text-[#86efac] hover:bg-[rgba(31,59,40,0.55)] hover:border-[rgba(59,106,58,0.8)]"
                             >
                                 Check
                             </button>
@@ -504,7 +519,7 @@
                                         type: "action",
                                         action: "call",
                                     })}
-                                class="flex-1 py-3 lg:py-4 rounded-xl border font-bold text-base lg:text-lg cursor-pointer transition-all flex items-center justify-center gap-2 font-body bg-[rgba(31,59,40,0.3)] border-[rgba(59,106,58,0.55)] text-[#86efac] hover:bg-[rgba(31,59,40,0.55)] hover:border-[rgba(59,106,58,0.8)]"
+                                class="flex-1 py-2 lg:py-3 rounded-xl border font-bold text-sm lg:text-base cursor-pointer transition-all flex items-center justify-center gap-2 font-body bg-[rgba(31,59,40,0.3)] border-[rgba(59,106,58,0.55)] text-[#86efac] hover:bg-[rgba(31,59,40,0.55)] hover:border-[rgba(59,106,58,0.8)]"
                             >
                                 Call <span
                                     class="font-mono text-base opacity-85"
@@ -518,7 +533,7 @@
                                     type: "action",
                                     action: "all-in",
                                 })}
-                            class="flex-1 py-3 lg:py-4 rounded-xl border font-bold text-base lg:text-lg cursor-pointer transition-all flex items-center justify-center gap-2 font-body bg-[rgba(217,119,6,0.12)] border-[rgba(217,119,6,0.4)] text-[#fbbf24] hover:bg-[rgba(217,119,6,0.24)] hover:border-[rgba(217,119,6,0.7)]"
+                            class="flex-1 py-2 lg:py-3 rounded-xl border font-bold text-sm lg:text-base cursor-pointer transition-all flex items-center justify-center gap-2 font-body bg-[rgba(217,119,6,0.12)] border-[rgba(217,119,6,0.4)] text-[#fbbf24] hover:bg-[rgba(217,119,6,0.24)] hover:border-[rgba(217,119,6,0.7)]"
                         >
                             All-In <span class="font-mono text-base opacity-85"
                                 >{me?.chips}</span
@@ -545,7 +560,7 @@
                                             raiseInput -
                                                 (wsStore.game?.bigBlind ?? 10),
                                         ))}
-                                    class="w-14 shrink-0 bg-border/20 border border-border/55 rounded-lg text-[#e4d8c4] text-3xl font-bold flex items-center justify-center cursor-pointer transition-all hover:bg-gold/18 hover:border-gold/50 hover:text-gold-light active:scale-95"
+                                    class="w-10 lg:w-14 shrink-0 bg-border/20 border border-border/55 rounded-lg text-[#e4d8c4] text-2xl lg:text-3xl font-bold flex items-center justify-center cursor-pointer transition-all hover:bg-gold/18 hover:border-gold/50 hover:text-gold-light active:scale-95"
                                 >
                                     −
                                 </button>
@@ -554,7 +569,7 @@
                                     bind:value={raiseInput}
                                     min={minRaiseTo}
                                     max={maxRaiseTo}
-                                    class="flex-1 min-w-0 bg-black/45 border border-border/55 rounded-lg px-3 py-2.5 text-gold-light text-lg font-bold font-mono text-center outline-none focus:border-gold/60 transition-colors"
+                                    class="flex-1 min-w-0 bg-black/45 border border-border/55 rounded-lg px-2 py-1.5 text-gold-light text-base font-bold font-mono text-center outline-none focus:border-gold/60 transition-colors lg:px-3 lg:py-2.5 lg:text-lg"
                                 />
                                 <button
                                     onclick={() =>
@@ -563,7 +578,7 @@
                                             raiseInput +
                                                 (wsStore.game?.bigBlind ?? 10),
                                         ))}
-                                    class="w-14 shrink-0 bg-border/20 border border-border/55 rounded-lg text-[#e4d8c4] text-3xl font-bold flex items-center justify-center cursor-pointer transition-all hover:bg-gold/18 hover:border-gold/50 hover:text-gold-light active:scale-95"
+                                    class="w-10 lg:w-14 shrink-0 bg-border/20 border border-border/55 rounded-lg text-[#e4d8c4] text-2xl lg:text-3xl font-bold flex items-center justify-center cursor-pointer transition-all hover:bg-gold/18 hover:border-gold/50 hover:text-gold-light active:scale-95"
                                 >
                                     +
                                 </button>
@@ -574,7 +589,7 @@
                                             action: "raise",
                                             raiseToAmount: raiseInput,
                                         })}
-                                    class="shrink-0 px-6 bg-[rgba(183,121,31,0.2)] border border-[rgba(183,121,31,0.55)] text-[#fbbf24] text-base font-extrabold uppercase tracking-wide rounded-xl cursor-pointer transition-all hover:bg-[rgba(183,121,31,0.35)] hover:border-gold/80 font-body whitespace-nowrap"
+                                    class="shrink-0 px-3 lg:px-6 bg-[rgba(183,121,31,0.2)] border border-[rgba(183,121,31,0.55)] text-[#fbbf24] text-base font-extrabold uppercase tracking-wide rounded-xl cursor-pointer transition-all hover:bg-[rgba(183,121,31,0.35)] hover:border-gold/80 font-body whitespace-nowrap"
                                 >
                                     Raise
                                 </button>
@@ -584,7 +599,7 @@
                                     <button
                                         onclick={() =>
                                             (raiseInput = val as number)}
-                                        class="flex-1 py-2 bg-white/4 border border-border/45 rounded-md text-sm font-bold uppercase tracking-wide text-muted cursor-pointer transition-all hover:bg-gold/12 hover:border-gold/45 hover:text-gold-light font-body"
+                                        class="flex-1 py-1 lg:py-2 bg-white/4 border border-border/45 rounded-md text-xs lg:text-sm font-bold uppercase tracking-wide text-muted cursor-pointer transition-all hover:bg-gold/12 hover:border-gold/45 hover:text-gold-light font-body"
                                     >
                                         {label}
                                     </button>
@@ -781,6 +796,166 @@
             </div>
         </div>
     </div>
+
+    <!-- ── Mobile: Hand History overlay ──────────────────────────── -->
+    {#if showMobileLog}
+        <div
+            class="fixed inset-0 z-[60] flex flex-col bg-[rgba(8,5,2,0.98)] lg:hidden"
+        >
+            <div
+                class="flex items-center justify-between px-5 py-4 border-b border-border/40 shrink-0"
+            >
+                <span
+                    class="font-title text-lg font-bold text-gold-light"
+                    style="text-shadow: 0 0 16px rgba(232,184,64,0.3);"
+                    >Hand History</span
+                >
+                <button
+                    onclick={() => (showMobileLog = false)}
+                    class="text-3xl text-muted hover:text-[#e4d8c4] bg-transparent border-none cursor-pointer leading-none px-2"
+                    >×</button
+                >
+            </div>
+            <div
+                class="flex-1 overflow-y-auto px-4 py-3 flex flex-col gap-2"
+                bind:this={logEl}
+            >
+                {#if wsStore.eventLog.length === 0}
+                    <p class="text-sm text-muted text-center italic py-8">
+                        Waiting for events…
+                    </p>
+                {:else}
+                    {#each wsStore.eventLog as { seq, event, ts } (seq)}
+                        {@const fmt = formatEvent(event)}
+                        {#if fmt.text && fmt.label !== null}
+                            {@const labelColors =
+                                {
+                                    DEAL: "text-[#c8a84a] bg-[rgba(200,168,74,0.14)] border-[rgba(200,168,74,0.32)]",
+                                    BLINDS: "text-[#b8963c] bg-[rgba(184,150,60,0.12)] border-[rgba(184,150,60,0.3)]",
+                                    RAISE: "text-[#fbbf24] bg-[rgba(251,191,36,0.14)] border-[rgba(251,191,36,0.38)]",
+                                    CALL: "text-[#86efac] bg-[rgba(134,239,172,0.1)] border-[rgba(134,239,172,0.28)]",
+                                    CHECK: "text-[#a0a09a] bg-[rgba(160,160,154,0.1)] border-[rgba(160,160,154,0.24)]",
+                                    BET: "text-[#fb923c] bg-[rgba(251,146,60,0.12)] border-[rgba(251,146,60,0.3)]",
+                                    FOLD: "text-[#f87171] bg-[rgba(248,113,113,0.1)] border-[rgba(248,113,113,0.26)]",
+                                    "ALL-IN":
+                                        "text-[#f97316] bg-[rgba(249,115,22,0.15)] border-[rgba(249,115,22,0.38)]",
+                                    WIN: "text-[#fde68a] bg-[rgba(253,230,138,0.18)] border-[rgba(253,230,138,0.42)]",
+                                    SHOW: "text-[#c4b5fd] bg-[rgba(196,181,253,0.1)] border-[rgba(196,181,253,0.28)]",
+                                    JOIN: "text-[#94a3b8] bg-[rgba(148,163,184,0.08)] border-[rgba(148,163,184,0.2)]",
+                                    LEFT: "text-[#94a3b8] bg-[rgba(148,163,184,0.08)] border-[rgba(148,163,184,0.2)]",
+                                }[fmt.label] ??
+                                "text-muted bg-black/20 border-border/30"}
+                            <div
+                                class="flex items-start gap-2.5 px-3 py-3 rounded-xl border border-[rgba(75,62,39,0.35)] bg-[rgba(20,14,6,0.6)]"
+                            >
+                                <span
+                                    class="shrink-0 text-[0.65rem] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded border leading-none mt-0.5 font-body {labelColors}"
+                                    >{fmt.label}</span
+                                >
+                                <div class="flex-1 min-w-0">
+                                    <div
+                                        class="flex items-baseline justify-between gap-2"
+                                    >
+                                        <span
+                                            class="text-[0.9rem] font-semibold leading-snug font-body {fmt.label === 'WIN' ? 'text-gold-light' : fmt.label === 'JOIN' || fmt.label === 'LEFT' ? 'text-muted' : 'text-[#e8e0d0]'}"
+                                            >{fmt.text}</span
+                                        >
+                                        {#if fmt.amount}
+                                            <span
+                                                class="shrink-0 text-[0.95rem] font-extrabold font-mono {fmt.label === 'WIN' ? 'text-gold' : 'text-[#e8c96a]'}"
+                                                >${fmt.amount}</span
+                                            >
+                                        {/if}
+                                    </div>
+                                    <span
+                                        class="text-[0.7rem] text-muted/55 font-mono mt-0.5 block"
+                                        >{ts}</span
+                                    >
+                                </div>
+                            </div>
+                        {/if}
+                    {/each}
+                {/if}
+            </div>
+        </div>
+    {/if}
+
+    <!-- ── Mobile: Hand Rankings overlay ─────────────────────────── -->
+    {#if showMobileRankings}
+        <div
+            class="fixed inset-0 z-[60] flex flex-col bg-[rgba(8,5,2,0.98)] lg:hidden"
+        >
+            <div
+                class="flex items-center justify-between px-5 py-4 border-b border-border/40 shrink-0"
+            >
+                <span
+                    class="font-title text-lg font-bold text-gold-light"
+                    style="text-shadow: 0 0 16px rgba(232,184,64,0.3);"
+                    >Hand Rankings</span
+                >
+                <button
+                    onclick={() => (showMobileRankings = false)}
+                    class="text-3xl text-muted hover:text-[#e4d8c4] bg-transparent border-none cursor-pointer leading-none px-2"
+                    >×</button
+                >
+            </div>
+            <div class="overflow-y-auto p-4 grid grid-cols-2 gap-3">
+                {#each HANDS_REF as hand, i}
+                    {@const tier = i < 2 ? 3 : i < 5 ? 2 : i < 7 ? 1 : 0}
+                    {@const cardBorder = [
+                        "border-border/35",
+                        "border-[rgba(251,146,60,0.3)]",
+                        "border-[rgba(74,222,128,0.28)]",
+                        "border-gold/45",
+                    ][tier]}
+                    {@const cardBg = [
+                        "bg-[rgba(20,14,6,0.7)]",
+                        "bg-[rgba(251,146,60,0.06)]",
+                        "bg-[rgba(74,222,128,0.05)]",
+                        "bg-gold/7",
+                    ][tier]}
+                    {@const nameClr = [
+                        "text-[#c8c0b0]",
+                        "text-[#fdba74]",
+                        "text-[#86efac]",
+                        "text-gold-light",
+                    ][tier]}
+                    {@const badgeBg = [
+                        "bg-[rgba(160,154,140,0.18)] text-[#908880]",
+                        "bg-[rgba(251,146,60,0.18)] text-[#fdba74]",
+                        "bg-[rgba(74,222,128,0.15)] text-[#86efac]",
+                        "bg-gold/18 text-gold-light",
+                    ][tier]}
+                    <div
+                        class="relative flex flex-col gap-2 p-3 rounded-xl border {cardBorder} {cardBg}"
+                    >
+                        <span
+                            class="absolute top-2 right-2 text-[0.6rem] font-extrabold font-mono px-1.5 py-0.5 rounded-full leading-none {badgeBg}"
+                            >#{i + 1}</span
+                        >
+                        <span
+                            class="text-[0.9rem] font-extrabold font-body pr-7 leading-tight {nameClr}"
+                            >{hand.name}</span
+                        >
+                        <div class="flex flex-wrap gap-1">
+                            {#each hand.example.split(" ") as token}
+                                {@const red =
+                                    token.includes("♥") ||
+                                    token.includes("♦")}
+                                <span
+                                    class="text-[0.75rem] font-mono px-1.5 py-0.5 rounded leading-none font-bold bg-[#f5f3ec] border border-black/10 {red ? 'text-[#c0392b]' : 'text-[#1a1a1a]'}"
+                                    >{token}</span
+                                >
+                            {/each}
+                        </div>
+                        <span class="text-[0.72rem] text-muted font-body leading-snug"
+                            >{hand.desc}</span
+                        >
+                    </div>
+                {/each}
+            </div>
+        </div>
+    {/if}
 </div>
 
 <style>

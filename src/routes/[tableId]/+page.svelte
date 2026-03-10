@@ -12,12 +12,12 @@
     // ─── Constants ────────────────────────────────────────────────────────────
 
     const SEAT_POS = [
-        { top: "76%", left: "50%" }, // 0 – bottom (local player)
-        { top: "70%", left: "84%" }, // 1 – bottom-right
-        { top: "26%", left: "85%" }, // 2 – right
-        { top: "6%", left: "66%" }, // 3 – top-right
-        { top: "6%", left: "34%" }, // 4 – top-left
-        { top: "26%", left: "15%" }, // 5 – left
+        { top: "72%", left: "50%" }, // 0 – bottom (local player)
+        { top: "66%", left: "84%" }, // 1 – bottom-right
+        { top: "30%", left: "85%" }, // 2 – right
+        { top: "11%", left: "66%" }, // 3 – top-right
+        { top: "11%", left: "34%" }, // 4 – top-left
+        { top: "30%", left: "15%" }, // 5 – left
     ] as const;
 
     const HANDS_REF = [
@@ -786,10 +786,10 @@
 <style>
     .felt-oval {
         position: absolute;
-        top: 5%;
-        left: 6%;
-        right: 6%;
-        bottom: 5%;
+        top: 8%;
+        left: 14%;
+        right: 14%;
+        bottom: 22%;
         border-radius: 50%;
         background: radial-gradient(
             ellipse at 45% 42%,
